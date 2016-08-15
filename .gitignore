@@ -4,3 +4,4 @@ jspm_packages
 bower_components
 nbproject
 dist
+*.log
