@@ -1,12 +1,19 @@
 import restify = require('restify');
 import { SwitchModel } from './../models/switch.model';
+import { Switch } from './../models/switch';
 
 export default class SwitchController {
     constructor(private switchModel: SwitchModel) {}
     
     status(req: restify.Request, res: restify.Response, next: restify.Next) {
-        console.log(this.switchModel.get(1));
-        res.json(200, 'status');
+        let id = req.params['id'];
+        let _switch: Switch = this.switchModel.get(id);
+        if (_switch) {
+            res.json(200, {status: _switch.status});
+        }
+        else {
+            res.json(200, {error: "unknown key"});
+        }
         return next();
     }
     
