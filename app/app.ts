@@ -2,6 +2,7 @@
 import restify = require('restify');
 import SwitchController from './controllers/switch.controller';
 
+import { SwitchService } from './services/switch.service';
 import { SwitchModel } from './models/switch.model';
 
 restify.CORS.ALLOW_HEADERS.push('authorization');
@@ -10,7 +11,8 @@ var server = restify.createServer();
 server.use(restify.CORS());
 
 let switchModel = new SwitchModel();
-let switchController = new SwitchController(switchModel);
+let switchService = new SwitchService(switchModel);
+let switchController = new SwitchController(switchService);
 server.get('/switch/:id/status', switchController.status.bind(switchController));
 server.get('/switch/:id/toggle', switchController.toggle.bind(switchController));
 

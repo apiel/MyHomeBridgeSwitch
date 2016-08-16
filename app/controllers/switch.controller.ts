@@ -1,9 +1,9 @@
 import restify = require('restify');
-import { SwitchModel } from './../models/switch.model';
+import { SwitchService } from './../services/switch.service';
 import { Switch } from './../models/switch';
 
 export default class SwitchController {
-    constructor(private switchModel: SwitchModel) {}
+    constructor(private switchService: SwitchService) {}
     
     statusResponse(_switch: Switch, res: restify.Response, next: restify.Next) {
         if (_switch) {
@@ -17,19 +17,14 @@ export default class SwitchController {
     
     status(req: restify.Request, res: restify.Response, next: restify.Next) {
         let id = req.params['id'];
-        let _switch: Switch = this.switchModel.get(id);
+        let _switch: Switch = this.switchService.get(id);
         
         return this.statusResponse(_switch, res, next);
     }
     
     toggle(req: restify.Request, res: restify.Response, next: restify.Next) {
         let id = req.params['id'];
-        let _switch: Switch = this.switchModel.get(id);
-        
-        if (_switch) {
-            _switch.status = _switch.status === "on" ? "off" : "on";
-            this.switchModel.save();
-        }        
+        let _switch: Switch = this.switchService.toggle(id);
         
         return this.statusResponse(_switch, res, next);
     }   
