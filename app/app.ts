@@ -9,10 +9,10 @@ restify.CORS.ALLOW_HEADERS.push('authorization');
 var server = restify.createServer();
 server.use(restify.CORS());
 
-
 let switchModel = new SwitchModel();
 let switchController = new SwitchController(switchModel);
-server.get('/switch/status/:id', switchController.status.bind(switchController));
+server.get('/switch/:id/status', switchController.status.bind(switchController));
+server.get('/switch/:id/toggle', switchController.toggle.bind(switchController));
 
 server.listen(3030, function() {
   console.log('%s listening at %s', server.name, server.url);
