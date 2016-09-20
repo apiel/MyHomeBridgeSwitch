@@ -14,7 +14,8 @@ let switchModel = new SwitchModel();
 let switchService = new SwitchService(switchModel);
 let switchController = new SwitchController(switchService);
 server.get('/switch/:id/status', switchController.status.bind(switchController));
-server.get('/switch/:id/toggle', switchController.toggle.bind(switchController));
+//server.get('/switch/:id/toggle', switchController.toggle.bind(switchController));
+server.get('/switch/:id/:status', switchController.setStatus.bind(switchController));
 
 server.listen(3030, function() {
   console.log('%s listening at %s', server.name, server.url);

@@ -1,3 +1,4 @@
+import * as request from 'request';
 import { SwitchModel } from './../models/switch.model';
 import { Switch } from './../models/switch';
 
@@ -9,33 +10,58 @@ export class SwitchService{
         return _switch;
     }
     
-    toggle(id: number): Switch {
+//    toggle(id: number): Switch {
+//        let _switch: Switch = this.get(id);
+//        if (_switch) {
+//            for(let urlKey in _switch.urls) {
+//                if (!_switch.status) {
+//                    _switch.status = urlKey;
+//                    break;
+//                }
+//                else if (_switch.status === urlKey) {
+//                    _switch.status = null;
+//                }
+//            }
+//            if (!_switch.status) {
+//                _switch.status = Object.keys(_switch.urls)[0];
+//            }
+//            _switch = this.setStatus(id, _switch.status);           
+//        }        
+//        
+//        return _switch;
+//    }
+    
+    toggle(_switch: Switch): string {
+        for(let urlKey in _switch.urls) {
+            if (!_switch.status) {
+                _switch.status = urlKey;
+                break;
+            }
+            else if (_switch.status === urlKey) {
+                _switch.status = null;
+            }
+        }
+        if (!_switch.status) {
+            _switch.status = Object.keys(_switch.urls)[0];
+        }
+        return _switch.status;
+    }    
+    
+    setStatus(id: number, status: string): Switch {
         let _switch: Switch = this.get(id);
         if (_switch) {
-            _switch.status = _switch.status === "on" ? "off" : "on";
+            if (_switch.urls[status]) {
+                _switch.status = status;
+            }
+            else if (status === "toggle") {
+                _switch.status = this.toggle(_switch);
+            }
+            else {
+                // throw error status does not exist
+            }
             this.switchModel.save();
-            this.sendCode(_switch, _switch.status);
+            request(_switch.urls[_switch.status]);                  
         }        
-        
         return _switch;
-    }
-    
-    sendCode(_switch: Switch, status: string) {
-        var http = require('http');
-        http.get({
-          hostname: '192.168.0.31', // add ip in switch setting
-          path: '/send?bit=' + _switch[status].bit + '&code=' + _switch[status].code,
-          agent: false  // create a new agent just for this one request
-        }, (response) => {
-                // Do stuff with response
-              //  var str = '';
-              //  response.on('data', function (chunk) {
-              //    str += chunk;
-              //  });
-              //
-              //  response.on('end', function () {
-              //    console.log(str);
-              //  });  
-        }).end();        
-    }
+    }    
 }

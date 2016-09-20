@@ -22,16 +22,18 @@ export default class SwitchController {
         return this.statusResponse(_switch, res, next);
     }
     
-    toggle(req: restify.Request, res: restify.Response, next: restify.Next) {
+//    toggle(req: restify.Request, res: restify.Response, next: restify.Next) {
+//        let id = req.params['id'];
+//        let _switch: Switch = this.switchService.toggle(id);
+//        
+//        return this.statusResponse(_switch, res, next);
+//    }   
+    
+    setStatus(req: restify.Request, res: restify.Response, next: restify.Next) {
         let id = req.params['id'];
-        let _switch: Switch = this.switchService.toggle(id);
+        let status = req.params['status'];
+        let _switch: Switch = this.switchService.setStatus(id, status);
         
         return this.statusResponse(_switch, res, next);
-    }   
-    
-    //{"name":"Spot light chillarea","button":1,"status":"off","on":{"code":123456,"bit":24,"protocol":1,"delay":180},"off":{"code":654321,"bit":24,"protocol":1,"delay":180}}
-    //add(req: restify.Request, res: restify.Response, next: restify.Next) {
-    //        res.json(200, 'pong');
-    //        return next();
-    //}    
+    } 
 }

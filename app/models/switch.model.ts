@@ -26,6 +26,6 @@ export class SwitchModel{
     
     save() {
         console.log("Save switches.");
-        fs.writeFileSync(this.filePath, JSON.stringify(this.switches), 'utf8');
+        fs.writeFileSync(this.filePath, JSON.stringify(this.switches, null, 4), 'utf8');
     }
 }
